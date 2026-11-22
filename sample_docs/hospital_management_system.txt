@@ -1,0 +1,57 @@
+# SOFTWARE REQUIREMENT SPECIFICATION
+# Comprehensive Hospital Management System (HMS)
+# Version 1.0 - Healthcare Services 2026
+
+## 1. Project Overview & Scope
+The Comprehensive Hospital Management System (HMS) is a HIPAA-compliant healthcare enterprise platform designed to coordinate outpatient and inpatient clinical operations, streamline patient registration, automate appointment scheduling, manage electronic health records (EHR), and facilitate pharmaceutical prescriptions and medical billing.
+
+## 2. User Roles & Actors
+- Patient: Can register for an account, view medical history, schedule appointments with specialists, and pay consultation invoices online.
+- Doctor / Physician: Can view assigned patient queues, review clinical charts, update diagnostic notes, prescribe medications, and order lab tests.
+- Nurse / Triage Staff: Can record vital signs (blood pressure, temperature, pulse), manage bed allocations, and track medication administration.
+- Hospital Administrator: Can manage department rosters, physician schedules, billing rate cards, and regulatory compliance reports.
+
+## 3. Functional Requirements
+
+### Module 1: Patient Admission & Identity Management
+- FR-001: The system shall register patients with national health identification, contact details, emergency contacts, and insurance information.
+- FR-002: Patients shall authenticate securely using multi-factor authentication (MFA) and receive role-permissioned portal access.
+- FR-003: Staff shall be able to look up patient records by patient identifier, government ID number, or phone number.
+
+### Module 2: Doctor Schedule & Appointment Booking
+- FR-004: Patients shall be able to browse doctor profiles, specialty departments, consultation fees, and available calendar slots.
+- FR-005: The system shall allow patients to book, reschedule, or cancel outpatient consultations up to 2 hours prior to scheduled time.
+- FR-006: The system shall automatically send appointment confirmation and reminder SMS/emails 24 hours prior to consultation.
+
+### Module 3: Electronic Health Records (EHR) & Clinical Charting
+- FR-007: Physicians shall be able to record clinical encounter summaries, ICD-10 diagnostic codes, and treatment plans.
+- FR-008: Nursing staff shall record patient vital signs and allergy alerts prior to physician examination.
+- FR-009: Patient electronic medical records must maintain immutable audit logs recording the timestamp and staff ID for every access.
+
+### Module 4: Pharmacy & Electronic Prescription Management
+- FR-010: Physicians shall issue electronic prescriptions specifying drug name, dosage, frequency, and treatment duration.
+- FR-011: The pharmacy module shall verify drug-drug interactions and allergy contraindications before dispensing medication.
+- FR-012: Pharmacists shall update inventory stocks when medications are dispensed to patients.
+
+### Module 5: Medical Billing & Insurance Claims
+- FR-013: The billing service shall generate itemized invoices encompassing consultation fees, laboratory diagnostics, and medications.
+- FR-014: The system shall support electronic insurance pre-authorization and claim submission.
+
+## 4. Non-Functional Requirements
+- NFR-001 (Performance): Patient chart retrieval must complete within 400 milliseconds to prevent clinical workflow disruption.
+- NFR-002 (Security & Compliance): System must comply with HIPAA and GDPR regulations. All protected health information (PHI) must be encrypted at rest with AES-256 and in transit with TLS 1.3.
+- NFR-003 (Availability): The core inpatient clinical system must guarantee 99.99% high availability with zero single points of failure.
+- NFR-004 (Auditability): All modifications to medical records must be strictly append-only with cryptographic hash verification.
+- NFR-005 (Capacity): The database must scale to accommodate 500,000 patient records and 5,000 daily clinical encounters.
+
+## 5. Domain Entities & Data Attributes
+- Patient: id, national_id (unique), full_name, date_of_birth, gender, contact_phone, email, insurance_provider, created_at
+- Doctor: id, medical_license (unique), full_name, specialty, department_id (FK), consultation_fee, is_available
+- Appointment: id, patient_id (FK), doctor_id (FK), appointment_date, appointment_time, status (scheduled, completed, cancelled)
+- MedicalRecord: id, patient_id (FK), doctor_id (FK), appointment_id (FK), diagnosis, clinical_notes, vitals_json, created_at
+- Prescription: id, medical_record_id (FK), drug_name, dosage, frequency, duration_days, status (prescribed, dispensed)
+- Invoice: id, patient_id (FK), total_amount, insurance_covered, patient_payable, payment_status, created_at
+
+## 6. Technical Constraints & Assumptions
+- System must provide RESTful JSON APIs for integration with hospital laboratory equipment and external PACS imaging servers.
+- Role-based authorization must enforce strict data partition between clinical staff and administrative billing personnel.

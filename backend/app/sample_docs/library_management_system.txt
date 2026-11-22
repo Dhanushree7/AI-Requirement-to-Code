@@ -1,0 +1,59 @@
+# SOFTWARE REQUIREMENT SPECIFICATION
+# Intelligent Library Management System (ILMS)
+# Version 1.0 - Academic Year 2026
+
+## 1. Project Overview & Scope
+The Intelligent Library Management System (ILMS) is an enterprise web-based application designed to automate the administrative operations of university libraries, optimize resource allocation, and enhance the patron borrowing experience. The system serves two primary categories of end-users: Students (Patrons) and Library Administrators (Staff).
+
+## 2. User Roles & Actors
+- Student / Patron: Can register, search the digital catalog, place reservations, borrow up to 3 books concurrently, renew checkouts, and view pending fines.
+- Librarian / Admin: Can catalog new books, update inventory, issue and accept physical book returns, calculate fines for overdue returns, and generate circulation reports.
+- System Scheduler: An automated background service that checks due dates daily, sends renewal alerts via email, and computes daily overdue fines ($1.00/day).
+
+## 3. Functional Requirements
+
+### Module 1: Catalog & Book Management
+- FR-001: The system shall allow patrons to search for books by Title, Author, ISBN, Subject Category, and Availability Status.
+- FR-002: The system shall support real-time availability checking showing total copies, copies currently borrowed, and shelf location.
+- FR-003: Administrators shall be able to add new book titles with metadata (ISBN, Title, Author, Publisher, Edition, Publication Year, Copies).
+- FR-004: Administrators shall be able to update, categorize, or decommission lost/damaged book copies.
+
+### Module 2: Patron Management & Authentication
+- FR-005: Students must authenticate using their University ID and secure password with JWT Bearer token authentication.
+- FR-006: The system shall maintain student profiles including Department, Contact Email, Student ID, and Current Borrowing Status.
+- FR-007: Administrators shall have role-based access control (RBAC) permitting staff privileges not available to standard patrons.
+
+### Module 3: Borrowing & Return Circulation
+- FR-008: A patron may borrow a book for a maximum duration of 14 calendar days.
+- FR-009: A patron cannot borrow more than 3 books at any given time.
+- FR-010: Patrons with unpaid fines exceeding $10.00 shall be blocked from borrowing or reserving additional books.
+- FR-011: When a book is returned, the system shall record the return date and compute any applicable overdue penalties.
+- FR-012: Patrons may renew an active loan once for an additional 7 days if no reservation exists from another patron.
+
+### Module 4: Fines & Penalty Management
+- FR-013: Overdue loans shall incur a penalty of $1.00 per day after the due date.
+- FR-014: Administrators shall be able to record fine payments and issue digital payment receipts.
+
+### Module 5: Reservation & Queueing
+- FR-015: If all copies of a book are currently borrowed, a patron may place a reservation request.
+- FR-016: When a reserved book is returned, the system shall notify the patron at the top of the queue and hold the book for 48 hours.
+
+## 4. Non-Functional Requirements
+- NFR-001 (Performance): Book search query responses shall be returned within 500 milliseconds under a concurrent load of 500 users.
+- NFR-002 (Security): All patron passwords must be hashed using bcrypt with salt rounds >= 12. Sensitive endpoints require TLS 1.3 encryption.
+- NFR-003 (Availability): The system shall maintain 99.9% uptime during university operating semesters.
+- NFR-004 (Data Integrity): Database transactions for borrowing and returns must strictly adhere to ACID properties to prevent double-checkout race conditions.
+- NFR-005 (Scalability): The architecture shall support a catalog of at least 100,000 book titles and 20,000 active students.
+
+## 5. Domain Entities & Data Attributes
+- Book: id, isbn (unique), title, author, publisher, publication_year, category, total_copies, available_copies, created_at
+- Student: id, student_id (unique), full_name, email (unique), hashed_password, department, fine_balance, is_active, created_at
+- Borrowing: id, student_id (FK), book_id (FK), borrowed_at, due_date, returned_at, status (active, returned, overdue)
+- Reservation: id, student_id (FK), book_id (FK), reserved_at, expires_at, status (pending, fulfilled, expired)
+- Fine: id, borrowing_id (FK), student_id (FK), amount, status (unpaid, paid), paid_at
+
+## 6. Constraints & Assumptions
+- CON-001: The system backend must be implemented using Python FastAPI with relational database storage.
+- CON-002: Frontend user interface must be accessible via modern web browsers (Chrome, Firefox, Safari, Edge).
+- ASM-001: University identity provider provides student verification or students self-register with verified university email domains (.edu).
+- ASM-002: Physical book handling is verified by library staff at circulation desks.

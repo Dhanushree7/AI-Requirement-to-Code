@@ -1,0 +1,57 @@
+# SOFTWARE REQUIREMENT SPECIFICATION
+# Enterprise Hotel & Resort Booking System
+# Version 1.0 - Hospitality Management 2026
+
+## 1. Project Overview & Scope
+The Enterprise Hotel & Resort Booking System is an integrated hospitality platform engineered to automate room inventory management, guest reservations, dynamic seasonal pricing, front-desk check-in/check-out services, concierge housekeeping scheduling, and guest billing.
+
+## 2. User Roles & Actors
+- Guest / Traveler: Can search available room types by dates, view room amenities, reserve rooms with credit card guarantee, view reservation status, and request room service.
+- Front Desk Receptionist: Can process guest check-ins, issue electronic digital key cards, record incidental room charges, process room upgrades, and handle check-outs.
+- Housekeeping Supervisor: Can monitor room clean/dirty states, assign cleaning shifts, and flag rooms requiring facility maintenance.
+- Hotel General Manager: Configures room categories, sets seasonal tariff rates, monitors occupancy percentages, and reviews revenue per available room (RevPAR).
+
+## 3. Functional Requirements
+
+### Module 1: Room Catalog & Availability Search
+- FR-001: The system shall allow guests to search for available rooms by check-in date, check-out date, number of adults/children, and room category (Deluxe, Suite, Standard).
+- FR-002: Room detail views shall showcase high-resolution photos, bed configurations, maximum occupancy, and included amenities (Wi-Fi, breakfast, ocean view).
+- FR-003: Administrators shall configure room inventories, floor assignments, and operational maintenance blocks.
+
+### Module 2: Reservation & Deposit Management
+- FR-004: Guests shall reserve rooms by providing guest contact information and credit card payment authorization.
+- FR-005: The system shall calculate total stay costs including night rates, city occupancy taxes, and service fees.
+- FR-006: Guests shall be permitted to modify or cancel reservations without penalty up to 48 hours prior to the 3:00 PM check-in time.
+
+### Module 3: Front Desk Check-in & Check-out Operations
+- FR-007: Front-desk staff shall execute guest check-ins, verify guest identification, and assign physical room numbers.
+- FR-008: Receptionists shall record incidental security deposits and issue digital room key credentials.
+- FR-009: During check-out, the system shall compute final folios incorporating room rates, minibar consumption, and dining charges.
+
+### Module 4: Housekeeping & Room Status Management
+- FR-010: The housekeeping module shall maintain real-time status for every room: Clean, Dirty, Inspected, Out-of-Order.
+- FR-011: When a guest checks out, the room status shall automatically transition to Dirty and notify the housekeeping queue.
+- FR-012: Housekeeping staff shall update room status to Clean upon completing sanitation protocols.
+
+### Module 5: Concierge Services & Guest Billing
+- FR-013: Guests shall be able to order dining room service and book spa appointments charged directly to their room folio.
+- FR-014: The billing engine shall process credit card payments and issue electronic tax invoices upon checkout.
+
+## 4. Non-Functional Requirements
+- NFR-001 (Search Speed): Real-time room availability search results must load in less than 450 milliseconds across 10,000 calendar dates.
+- NFR-002 (Security & Compliance): Guest personal data and payment credentials must be encrypted with TLS 1.3 and stored in compliance with PCI-DSS.
+- NFR-003 (Reservation Integrity): Double-booking prevention must be enforced using pessimistic database row locking during checkout confirmation.
+- NFR-004 (High Availability): 99.9% operational uptime to avoid check-in desk disruption during peak hotel arrival hours.
+- NFR-005 (Scalability): The platform must manage property portfolios encompassing up to 50 hotel properties and 25,000 rooms.
+
+## 5. Domain Entities & Data Attributes
+- Guest: id, full_name, email (unique), phone_number, passport_number, loyalty_tier, created_at
+- RoomType: id, name, description, base_price_per_night, max_occupancy, amenities_json
+- Room: id, room_number (unique), room_type_id (FK), floor_number, status (clean, dirty, occupied, maintenance)
+- Reservation: id, guest_id (FK), room_id (FK), check_in_date, check_out_date, number_of_guests, total_price, status (confirmed, checked_in, checked_out, cancelled)
+- FolioCharge: id, reservation_id (FK), charge_type (room, dining, spa, minibar), amount, charged_at
+- Payment: id, reservation_id (FK), amount, payment_method, transaction_reference, status, created_at
+
+## 6. Technical Constraints & Assumptions
+- Centralized cloud platform with REST APIs enabling integration with global distribution systems (GDS) and online travel agencies (OTAs).
+- Automated night-audit scheduled job running daily at midnight to post room charges and update reporting ledgers.

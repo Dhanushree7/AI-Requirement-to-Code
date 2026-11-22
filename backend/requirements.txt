@@ -1,0 +1,37 @@
+# Core Framework & Server
+fastapi>=0.115.0,<1.0.0
+uvicorn[standard]>=0.30.0,<1.0.0
+
+# Data Validation & Settings
+pydantic>=2.8.0,<3.0.0
+pydantic-settings>=2.4.0,<3.0.0
+python-dotenv>=1.0.1
+
+# Database ORM & Persistence
+sqlalchemy>=2.0.30,<3.0.0
+psycopg2-binary>=2.9.9; sys_platform != "win32" or implementation_name == "cpython"
+
+# Security, Authentication & Cryptography
+bcrypt>=4.1.0
+PyJWT>=2.8.0
+cryptography>=43.0.0
+
+# File Upload Handling
+python-multipart>=0.0.9
+
+# Document Ingestion & Parsing
+PyMuPDF>=1.24.0
+python-docx>=1.1.0
+
+# Knowledge Graph
+networkx>=3.2.0
+
+# Vector Database & Embeddings
+chromadb>=0.5.0
+
+# HTTP Client (for Anthropic Claude & Ollama integrations)
+httpx>=0.27.0
+
+# LLM Provider SDKs
+google-generativeai>=0.8.0
+openai>=1.40.0

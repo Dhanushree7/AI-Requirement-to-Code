@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: req_to_code_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - LLM_PROVIDER=mock
+      - DATABASE_URL=sqlite:////app/storage/req_to_code.db
+      - CHROMA_DIR=/app/storage/chroma_db
+    volumes:
+      - backend_storage:/app/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: req_to_code_frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Optional Neo4j graph database (uncomment if you wish to run a dedicated Neo4j instance)
+  # neo4j:
+  #   image: neo4j:5.15-community
+  #   container_name: req_to_code_neo4j
+  #   ports:
+  #     - "7474:7474"  # Neo4j Browser UI
+  #     - "7687:7687"  # Bolt protocol
+  #   environment:
+  #     - NEO4J_AUTH=neo4j/password
+  #   volumes:
+  #     - neo4j_data:/data
+
+volumes:
+  backend_storage:
+  # neo4j_data:

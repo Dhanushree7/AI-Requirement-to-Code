@@ -1,0 +1,80 @@
+# ==========================================
+# Byte-compiled / Python Cache & Runtime
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+env/
+venv/
+.venv/
+ENV/
+
+# ==========================================
+# Environment Files & Secrets (NEVER COMMIT)
+# ==========================================
+.env
+*.env
+.env.*
+backend/.env
+backend/*.env
+frontend/.env
+frontend/.env.*
+
+# Allow safe environment example templates
+!.env.example
+!backend/.env.example
+!frontend/.env.example
+
+# ==========================================
+# Backend Local Storage, Databases & Keys
+# ==========================================
+backend/storage/
+storage/
+*.db
+*.sqlite
+*.sqlite3
+*.enc
+*.salt
+
+# ==========================================
+# Frontend Node Dependencies & Build Output
+# ==========================================
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.pytest_cache/
+
+# ==========================================
+# Temporary Development, Patches & Scratch
+# ==========================================
+scratch/
+
+# ==========================================
+# Operating System & IDE Files
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
