@@ -1,4 +1,4 @@
-# Req-to-Code (AI Assistant)
+
 > **An Intelligent Framework for Automated Software Requirement Analysis and Code Generation using LLMs**
 
 Req-to-Code is an end-to-end full-stack web application that ingests software requirement documents (PDF, DOCX, TXT) across **any domain** (Hospital, E-Commerce, Hotel, Banking, Education, Logistics, Food Delivery) and transforms them into structured engineering artifacts, including:
